@@ -13,10 +13,10 @@ import EnhancedTableToolbar from "./EnhancedTableToolbar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(12),
+    margin: theme.spacing(8),
   },
   paper: {
-    padding: 50,
+    padding: '10px 50px',
   },
   table: {
     minWidth: 750,

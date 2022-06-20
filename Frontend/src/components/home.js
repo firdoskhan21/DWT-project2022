@@ -2,6 +2,8 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { makeStyles, theme } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
+import PublishIcon from "@material-ui/icons/Publish";
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 export default function Home() {
   const useStyles = makeStyles((theme) => ({
@@ -9,7 +11,7 @@ export default function Home() {
       textAlign: "center",
     },
     margin: {
-      marginTop: theme.spacing(5),
+      margin: theme.spacing(2),
     },
     details: {
       width: 400,
@@ -27,29 +29,29 @@ export default function Home() {
   };
   return (
     <div className={classes.root}>
-      <h3 className={classes.margin}>File sharing platform</h3>
+      <h3 style={{ marginBotttom: 300 }}>File sharing platform</h3>
       <p className={classes.details}>
         It is a file sharing app which allows you to upload and share a file
         from your pc or mobile and transfer it to anyone across the internet
         quickly and easily.
       </p>
-      <div>
+      <div style={{ marginTop: 100 }}>
         <Button
           variant="contained"
-          size="large"
           color="primary"
           className={classes.margin}
           onClick={send}
+          endIcon={<PublishIcon />}
         >
           Send File
         </Button>
       </div>
       <Button
         variant="contained"
-        size="large"
         color="primary"
         className={classes.margin}
         onClick={download}
+        endIcon={<GetAppIcon />}
       >
         Download File
       </Button>

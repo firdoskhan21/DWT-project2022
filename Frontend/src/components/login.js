@@ -13,24 +13,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",
-    paddingTop: 100,
-  },
-  cardStyle: {
-    minWidth: 400,
-    minHeight: 450,
-    textAlign: "center",
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
   },
   title: {
     paddingBottom: 50,
     paddingTop: 50,
-  },
-  pos: {
-    marginBottom: 12,
+    textAlign: 'center'
   },
   form: {
     "& .MuiTextField-root": {
@@ -48,32 +35,37 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [userName, setUserName] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-  const authentication = () => {
-    console.log("lkwvowen");
-    navigate("/");
+  const authentication = (isAuth) => {
+    if(isAuth){
+        console.log(userName, password)
+        window.localStorage.setItem('user', 'userName');
+        navigate("/");
+    } else {
+        navigate("/");
+        window.localStorage.clear();
+    }
   };
   return (
     <Box mx="auto" className={classes.root}>
       <Card className={classes.cardStyle} variant="outlined">
         <CardContent>
-          {/* <Typography className={classes.title} color="textSecondary" gutterBottom>
-          Word of the Day
-        </Typography> */}
           <Typography className={classes.title} variant="h5" component="h2">
-            File sharing
+            Sign in
           </Typography>
 
           <form className={classes.form} noValidate autoComplete="off">
-            <TextField id="useName" label="User Name" variant="outlined" />
+            <TextField id="useName" label="User Name" variant="outlined" value={userName} onChange={(e)=>{setUserName(e.target.value)}} />
             <br />
-            <TextField id="password" label="Password" variant="outlined" />
+            <TextField id="password" label="Password" variant="outlined" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
           </form>
         </CardContent>
         <CardActions className={classes.cardActions}>
-          <Button variant="contained">Cancel</Button>
-          <Button variant="contained" color="primary" onClick={authentication}>
-            Sign in
+          <Button variant="contained" onClick={()=> authentication(false)}>Cancel</Button>
+          <Button variant="contained" color="primary" onClick={()=> authentication(true)}>
+            Submit
           </Button>
         </CardActions>
       </Card>
