@@ -97,7 +97,7 @@ export default function SendFile() {
             className={classes.margin}
             variant="contained"
             endIcon={<DeleteIcon />}
-            onClick={() => setFileName("")}
+            onClick={() => {setAddFile(true)}}
           >
             Delete
           </Button>

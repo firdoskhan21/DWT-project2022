@@ -58,6 +58,7 @@ export default function EnhancedTableHead(props) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell style={{width: 100}}></TableCell>
       </TableRow>
     </TableHead>
   );

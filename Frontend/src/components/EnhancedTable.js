@@ -10,13 +10,16 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Card from "@material-ui/core/Card";
 import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
+import GetAppIcon from "@material-ui/icons/GetApp";
+import BlockIcon from "@material-ui/icons/Block";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(8),
   },
   paper: {
-    padding: '10px 50px',
+    padding: "10px 50px",
   },
   table: {
     minWidth: 750,
@@ -32,26 +35,30 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  size: {
+    height: 20,
+    width: 20,
+  },
 }));
 
-function createData(name, size, date) {
-  return { name, size, date };
+function createData(name, size, date, disabled) {
+  return { name, size, date, disabled };
 }
 
 const rows = [
-  createData("Cupcake", 305, 4.3),
-  createData("Donut", 452, 4.9),
-  createData("Eclair", 262, 6.0),
-  createData("Frozen yoghurt", 159, 4.0),
-  createData("Gingerbread", 356, 3.9),
-  createData("Honeycomb", 408, 6.5),
-  createData("Ice cream sandwich", 237, 4.3),
-  createData("Jelly Bean", 375, 0.0),
-  createData("KitKat", 518, 7.0),
-  createData("Lollipop", 392, 0.0),
-  createData("Marshmallow", 318, 2.0),
-  createData("Nougat", 360, 37.0),
-  createData("Oreo", 437, 4.0),
+  createData("Cupcake", 305, 4.3, true),
+  createData("Donut", 452, 4.9, false),
+  createData("Eclair", 262, 6.0, false),
+  createData("Frozen yoghurt", 159, 4.0, false),
+  createData("Gingerbread", 356, 3.9, true),
+  createData("Honeycomb", 408, 6.5, false),
+  createData("Ice cream sandwich", 237, 4.3, false),
+  createData("Jelly Bean", 375, 0.0, true),
+  createData("KitKat", 518, 7.0, false),
+  createData("Lollipop", 392, 0.0, false),
+  createData("Marshmallow", 318, 2.0, false),
+  createData("Nougat", 360, 37.0, true),
+  createData("Oreo", 437, 4.0, false),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -97,7 +104,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => !n.disabled && n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -172,7 +179,7 @@ export default function EnhancedTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      style={{ opacity: row.disabled ? ".5" : "1" }}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -181,8 +188,10 @@ export default function EnhancedTable() {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
+                          disabled={row.disabled}
                           checked={isItemSelected}
                           inputProps={{ "aria-labelledby": labelId }}
+                          onClick={(event) => handleClick(event, row.name)}
                         />
                       </TableCell>
                       <TableCell
@@ -195,6 +204,14 @@ export default function EnhancedTable() {
                       </TableCell>
                       <TableCell align="right">{row.size}</TableCell>
                       <TableCell align="right">{row.date}</TableCell>
+                      <TableCell align="right">
+                        <IconButton size="small" aria-label="download file" disabled={row.disabled}>
+                          <GetAppIcon className={classes.size} />
+                        </IconButton>
+                        <IconButton size="small" aria-label="Block file" disabled={row.disabled}>
+                          <BlockIcon className={classes.size} />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
