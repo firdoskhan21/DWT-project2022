@@ -11,12 +11,14 @@ import Card from "@material-ui/core/Card";
 import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import BlockIcon from "@material-ui/icons/Block";
 import IconButton from "@material-ui/core/IconButton";
-
+import Tooltip from "@material-ui/core/Tooltip";
+import LockIcon from '@material-ui/icons/Lock';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import FileStatusModal from './fileStatusModal';
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(8),
+    margin: theme.spacing(6),
   },
   paper: {
     padding: "10px 50px",
@@ -41,24 +43,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function createData(name, size, date, disabled) {
-  return { name, size, date, disabled };
+function createData(name, size, date, disabled, code) {
+  return { name, size, date, disabled, code };
 }
 
 const rows = [
-  createData("Cupcake", 305, 4.3, true),
-  createData("Donut", 452, 4.9, false),
-  createData("Eclair", 262, 6.0, false),
-  createData("Frozen yoghurt", 159, 4.0, false),
-  createData("Gingerbread", 356, 3.9, true),
-  createData("Honeycomb", 408, 6.5, false),
-  createData("Ice cream sandwich", 237, 4.3, false),
-  createData("Jelly Bean", 375, 0.0, true),
-  createData("KitKat", 518, 7.0, false),
-  createData("Lollipop", 392, 0.0, false),
-  createData("Marshmallow", 318, 2.0, false),
-  createData("Nougat", 360, 37.0, true),
-  createData("Oreo", 437, 4.0, false),
+  createData("Cupcake", 305, 4.3, true, '1lkvwvnekwweijwenfqwo'),
+  createData("Donut", 452, 4.9, false, '2lkvwvnekwweijwenfqwo'),
+  createData("Eclair", 262, 6.0, false, '3lkvwvnekwweijwenfqwo'),
+  createData("Frozen yoghurt", 159, 4.0, false, '4lkvwvnekwweijwenfqwo'),
+  createData("Gingerbread", 356, 3.9, true, '5lkvwvnekwweijwenfqwo'),
+  createData("Honeycomb", 408, 6.5, false, '6lkvwvnekwweijwenfqwo'),
+  createData("Ice cream sandwich", 237, 4.3, false, '7lkvwvnekwweijwenfqwo'),
+  createData("Jelly Bean", 375, 0.0, true, '8lkvwvnekwweijwenfqwo'),
+  createData("KitKat", 518, 7.0, false, '9lkvwvnekwweijwenfqwo'),
+  createData("Lollipop", 392, 0.0, false, '10lkvwvnekwweijwenfqwo'),
+  createData("Marshmallow", 318, 2.0, false, '11lkvwvnekwweijwenfqwo'),
+  createData("Nougat", 360, 37.0, true, '12lkvwvnekwweijwenfqwo'),
+  createData("Oreo", 437, 4.0, false, '13lkvwvnekwweijwenfqwo'),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -95,6 +97,10 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const admin = window.localStorage.getItem('user') === 'admin user';
+  const [open, setOpen] = React.useState(false);
+  const [code, setCode] = React.useState("");
+  const [action, setAction] = React.useState("");
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -104,7 +110,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => !n.disabled && n.name);
+      const newSelecteds = rows.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -140,10 +146,20 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+  // const handleChangeDense = (event) => {
+  //   setDense(event.target.checked);
+  // };
+  const handleClose = () => {
+    setCode('')
+    setOpen(false);
+    setAction('')
   };
 
+  const handleClickOpen = (code, action) => {
+    setAction(action)
+    setCode(code)
+    setOpen(true);
+  }
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows =
@@ -179,7 +195,7 @@ export default function EnhancedTable() {
                   return (
                     <TableRow
                       hover
-                      style={{ opacity: row.disabled ? ".5" : "1" }}
+                      // style={{ opacity: row.disabled ? ".5" : "1" }}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -188,7 +204,7 @@ export default function EnhancedTable() {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          disabled={row.disabled}
+                          // disabled={row.disabled}
                           checked={isItemSelected}
                           inputProps={{ "aria-labelledby": labelId }}
                           onClick={(event) => handleClick(event, row.name)}
@@ -205,12 +221,17 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.size}</TableCell>
                       <TableCell align="right">{row.date}</TableCell>
                       <TableCell align="right">
-                        <IconButton size="small" aria-label="download file" disabled={row.disabled}>
+                        <Tooltip title="download file">
+                          <IconButton size="small" disabled={row.disabled} onClick={() => handleClickOpen(row.code, 'download')}>
                           <GetAppIcon className={classes.size} />
                         </IconButton>
-                        <IconButton size="small" aria-label="Block file" disabled={row.disabled}>
-                          <BlockIcon className={classes.size} />
-                        </IconButton>
+                        </Tooltip>
+                        <Tooltip title={row.disabled ? "Unblock file" :"Block file"} disableFocusListener={!row.disabled}>
+                          <IconButton size="small" onClick={() => handleClickOpen(row.code, row.disabled ? "unblock" :"block")}> 
+                            {row.disabled ? <LockIcon className={classes.size} /> :
+                            <LockOpenIcon className={classes.size} />}
+                          </IconButton>
+                        </Tooltip>
                       </TableCell>
                     </TableRow>
                   );
@@ -222,6 +243,7 @@ export default function EnhancedTable() {
               )}
             </TableBody>
           </Table>
+          <FileStatusModal open={open} handleClose={handleClose} code={code} action={action}/>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}

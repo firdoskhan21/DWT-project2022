@@ -12,6 +12,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 const useStyles = makeStyles((theme) => ({
   root: {
     textAlign: "center",
+    marginTop: 100,
   },
   input: {
     display: "none",
@@ -97,7 +98,7 @@ export default function SendFile() {
             className={classes.margin}
             variant="contained"
             endIcon={<DeleteIcon />}
-            onClick={() => {setAddFile(true)}}
+            onClick={() => {refreshPage()}}
           >
             Delete
           </Button>

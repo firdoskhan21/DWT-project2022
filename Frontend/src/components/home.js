@@ -9,6 +9,7 @@ export default function Home() {
   const useStyles = makeStyles((theme) => ({
     root: {
       textAlign: "center",
+      marginTop: 100,
     },
     margin: {
       margin: theme.spacing(2),

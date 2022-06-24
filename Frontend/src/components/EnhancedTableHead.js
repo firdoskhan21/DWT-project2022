@@ -25,6 +25,7 @@ export default function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const admin = window.localStorage.getItem('user') === 'admin user';
 
   return (
     <TableHead>

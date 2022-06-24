@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",
+    marginTop: 100,
   },
   title: {
     paddingBottom: 50,
@@ -41,7 +42,7 @@ export default function Login() {
   const authentication = (isAuth) => {
     if(isAuth){
         console.log(userName, password)
-        window.localStorage.setItem('user', 'userName');
+        window.localStorage.setItem('user', userName);
         navigate("/");
     } else {
         navigate("/");

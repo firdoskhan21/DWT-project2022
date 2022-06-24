@@ -14,18 +14,15 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 50,
     cursor: "pointer",
   },
-  appBar: {
-    marginBottom: 100,
-  }
 }));
 
 export default function Header() {
   const classes = useStyles();
   const navigate = useNavigate();
-  const user = window.localStorage.getItem('user');
 
   const login = () => {
     navigate("/login");
+    window.localStorage.clear();
   };
 
   const changePath = (value) => {
@@ -33,10 +30,15 @@ export default function Header() {
   };
 
   return (
-    <div className={classes.appBar}>
+    <div>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h5" noWrap className={classes.titleSpace} onClick={() => changePath("")}>
+          <Typography
+            variant="h5"
+            noWrap
+            className={classes.titleSpace}
+            onClick={() => changePath("")}
+          >
             File sharing
           </Typography>
           <Button color="inherit" onClick={() => changePath("send")}>
@@ -46,9 +48,9 @@ export default function Header() {
             Download
           </Button>
 
-          {user && <Button color="inherit" onClick={() => changePath("list")}>
+          <Button color="inherit" onClick={() => changePath("list")}>
             All Files
-          </Button>}
+          </Button>
 
           <div className={classes.grow} />
           <Button color="inherit" onClick={login}>

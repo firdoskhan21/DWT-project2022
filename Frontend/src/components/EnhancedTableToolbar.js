@@ -24,32 +24,32 @@ import TextField from "@material-ui/core/TextField";
 import BlockIcon from "@material-ui/icons/Block";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ClearIcon from "@material-ui/icons/Clear";
+import LockIcon from "@material-ui/icons/Lock";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
+import MultipleFilesModal from "./multipleFilesModal";
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
+    display: "flex",
+    // justifyContent: "right",
   },
   formControl: {
-    margin: theme.spacing(1),
-    minWidth: 150,
-  },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-  title: {
-    flex: "1 1 100%",
+    marginLeft: theme.spacing(2),
+    minWidth: 250,
   },
   size: {
     height: 12,
     width: 12,
+  },
+  highlight: {
+    color: theme.palette.secondary.main,
+    backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+  },
+  title: {
+    marginRight: "auto",
   },
 }));
 
@@ -57,8 +57,8 @@ export default function EnhancedTableToolbar(props) {
   const classes = useToolbarStyles();
   const { numSelected } = props;
   const [open, setOpen] = React.useState(false);
-
   const [filter, setFilter] = React.useState("allFiles");
+  const admin = window.localStorage.getItem("user") === "admin user";
 
   const handleChange = (event) => {
     setFilter(event.target.value);
@@ -77,36 +77,41 @@ export default function EnhancedTableToolbar(props) {
         [classes.highlight]: numSelected > 0,
       })}
     >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          className={classes.title}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          {/* File sharing */}
-        </Typography>
-      )}
+      <div className={classes.title}>
+        {numSelected > 0 && (
+          <Typography color="inherit" variant="subtitle1" component="div">
+            {numSelected} selected
+          </Typography>
+        )}
+      </div>
 
       {numSelected > 0 ? (
         <>
-          <Tooltip title="download">
+          {/* <Tooltip title="download all selected files">
             <IconButton aria-label="download" onClick={handleClickOpen}>
               <GetAppIcon />
             </IconButton>
+          </Tooltip> */}
+
+          <Tooltip title="Block all selected files">
+            <IconButton
+              className={classes.buttonMargin}
+              aria-label="Block all selected files"
+              onClick={handleClickOpen}
+              // size="large"
+            >
+              <LockIcon />
+            </IconButton>
           </Tooltip>
-          <Tooltip title="Delete" onClick={handleClickOpen}>
-            <IconButton aria-label="delete">
-              <BlockIcon />
+
+          <Tooltip title="Unblock all selected files">
+            <IconButton
+              className={classes.buttonMargin}
+              aria-label="Unblock all selected files"
+              onClick={handleClickOpen}
+              // size="large"
+            >
+              <LockOpenIcon />
             </IconButton>
           </Tooltip>
         </>
@@ -118,10 +123,7 @@ export default function EnhancedTableToolbar(props) {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                  size="small"
-                    aria-label="Upload file"
-                  >
+                  <IconButton size="small" aria-label="Upload file">
                     <ClearIcon className={classes.size} />
                   </IconButton>
                 </InputAdornment>
@@ -136,41 +138,36 @@ export default function EnhancedTableToolbar(props) {
               value={filter}
               onChange={handleChange}
             >
-              <MenuItem value={"allFiles"}>All files</MenuItem>
-              <MenuItem value={"blockedFiles"}>Blocked files</MenuItem>
+              <MenuItem value={"allFiles"}>All Files</MenuItem>
+              <MenuItem value={"blockedFiles"}>Blocked Files</MenuItem>
+              <MenuItem value={"unblockedFiles"}>Downloadable Files</MenuItem>
+
+              {admin && (
+                <MenuItem value={"requestBlockFiles"}>
+                  Requested Block Files
+                </MenuItem>
+              )}
+              {admin && (
+                <MenuItem value={"requestUnblockFiles"}>
+                  Requested Unblock Files
+                </MenuItem>
+              )}
             </Select>
           </FormControl>
-          <Tooltip title="Upload file">
-            <IconButton aria-label="Upload file" onClick={handleClickOpen}>
+          <Tooltip title="Upload multiple files">
+            <IconButton
+              className={classes.buttonMargin}
+              aria-label="Upload file"
+              onClick={handleClickOpen}
+              // size="large"
+            >
               <AddIcon />
             </IconButton>
           </Tooltip>
         </>
       )}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Disagree
-          </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
+
+      <MultipleFilesModal open={open} handleClose={handleClose} />
     </Toolbar>
   );
 }
