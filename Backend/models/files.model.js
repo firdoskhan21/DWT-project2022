@@ -1,16 +1,45 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-const PersonSchema = new Schema({
-    firstName: {type: String},
-    lastName: {type: String},
-    gender: {type: String},
-    age: {type: Number},
-    email: {type: String},
-    education: {type: String},
-    salary: {type: Number},
-    maritalStatus: {type: String},
-});
+const documentSchema = mongoose.Schema(
+    {
+        originalfilename: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        title: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        description: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        file: {
+            type: Buffer,
+            required: true,
+            trim: true
+        },
+        file_url: {
+            type: String,
+            required: false
+        },
+        mimetype: {
+            type: String,
+            required: true
+        }
+    },
+    {
+        timestamps: true
+    }
+);
 
-module.exports = mongoose.model("Person", PersonSchema, "person");
-// Dritter Parameter gilt für den Collection Namen
+const Document = mongoose.model('File', documentSchema);
+
+module.exports = Document;
+
+
+
+
