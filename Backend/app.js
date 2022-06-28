@@ -1,3 +1,4 @@
+const constants = require('./config');
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,7 +7,7 @@ const file = require("./routes/file.route");
 const app = express();
 const port = 5000;
 
-const mongoDBUri = "mongodb://localhost:27017/FileSharing";
+const mongoDBUri = constants.mongoDBUri;
 
 mongoose.connect(mongoDBUri, {
     useNewUrlParser: true,

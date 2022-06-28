@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const documentSchema = mongoose.Schema(
     {
+        _id: {
+            type: String,
+            required: true,
+            trim: true
+        },
         originalfilename: {
             type: String,
             required: true,
@@ -14,11 +19,6 @@ const documentSchema = mongoose.Schema(
         },
         description: {
             type: String,
-            required: true,
-            trim: true
-        },
-        file: {
-            type: Buffer,
             required: true,
             trim: true
         },
