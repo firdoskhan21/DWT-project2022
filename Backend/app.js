@@ -15,7 +15,6 @@ mongoose.connect(mongoDBUri, {
 }, (error) => {
     if (error ? console.log(error) : console.log("MongoDB connected ... here:" + mongoDBUri));
 })
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
