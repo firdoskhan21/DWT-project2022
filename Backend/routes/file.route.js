@@ -7,6 +7,11 @@ const File = require('../models/files.model');
 const Router = express.Router();
 const { GridFsStorage } = require("multer-gridfs-storage");
 
+
+generateUrl = (id) => {
+    return constants.static_host + id
+}
+
 let bucket;
 mongoose.connection.on("connected", () => {
     var db = mongoose.connections[0].db;
@@ -59,11 +64,17 @@ Router.post(
                 description,
                 mimetype: req.file.mimetype,
                 originalfilename: req.file.originalname,
+                is_blocked: false
             }
             const file = await File(queryParam);
             await file.save();
+            let url = generateUrl(req.file.id)
+            const getFile = await File.updateOne(
+                { "_id": req.file.id },
+                { $set: { "file_url": url } })
             response = { file_data: req.body, message: "File uploaded succefully", status: 'success' }
             response.file_meta = req.file
+            response.file_data.fileUrl = url
             res.status(200).send(response)
 
         } catch (error) {

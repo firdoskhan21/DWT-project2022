@@ -8,5 +8,6 @@ module.exports = Object.freeze({
     WTC_creds: {
         username: 'fikh',
         sessionId: ''
-    }
+    },
+    static_host: 'fileSharing.files/DWT_Project/download/'
 });

@@ -29,6 +29,10 @@ const documentSchema = mongoose.Schema(
         mimetype: {
             type: String,
             required: true
+        },
+        is_blocked: {
+            type: Boolean,
+            required: true
         }
     },
     {
